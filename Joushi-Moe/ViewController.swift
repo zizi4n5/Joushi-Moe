@@ -11,32 +11,34 @@ import AVFoundation
 
 class ViewController: UIViewController {
 
+    @IBOutlet var cameraView :UIView!//viewController上に一つviewを敷いてそれと繋いでおく
+    
+    var faceTracker: FaceTracker? = nil
+    var voiceChanger: VoiceChanger? = nil
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        faceTracker = FaceTracker(view: self.cameraView, findface:findface)
+        voiceChanger = VoiceChanger()
     }
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
-    var faceTracker:FaceTracker? = nil;
-    @IBOutlet var cameraView :UIView!//viewController上に一つviewを敷いてそれと繋いでおく
-    
-    // 通知センターを作る
-    let notification = NotificationCenter.default
-    
-    
+
     var imageView = UIImageView(image: #imageLiteral(resourceName: "moe"))
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         self.imageView.alpha = 0
         self.view.addSubview(self.imageView)
-        
-        faceTracker = FaceTracker(view: self.cameraView, findface:findface)
-        VoiceChanger().start()
+
+        faceTracker?.start()
+        voiceChanger?.start()
     }
 
     

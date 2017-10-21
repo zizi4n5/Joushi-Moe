@@ -10,65 +10,69 @@ import UIKit
 import AVFoundation
 
 class FaceTracker: NSObject,AVCaptureVideoDataOutputSampleBufferDelegate {
+
     let captureSession = AVCaptureSession()
     let videoDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
     let audioDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeAudio)
-    
-    var videoOutput = AVCaptureVideoDataOutput()
-    var view:UIView
-    private var findface : (_ arr:Array<CGRect>) -> Void
-    required init(view:UIView, findface: @escaping (_ arr:Array<CGRect>) -> Void)
-    {
+    let videoOutput = AVCaptureVideoDataOutput()
+
+    let view:UIView
+    let findface : (_ arr:Array<CGRect>) -> Void
+    var currentVideoOrientation: AVCaptureVideoOrientation?
+
+
+    required init(view:UIView, findface: @escaping (_ arr:Array<CGRect>) -> Void) {
         self.view=view
         self.findface = findface
         super.init()
-        self.initialize()
+
+        initialize()
     }
-    
-    func initialize()
-    {
-        //各デバイスの登録(audioは実際いらない)
-        do {
-            let videoInput = try AVCaptureDeviceInput(device: self.videoDevice) as AVCaptureDeviceInput
-            self.captureSession.addInput(videoInput)
-        } catch let error as NSError {
-            print(error)
-        }
-        do {
-            let audioInput = try AVCaptureDeviceInput(device: self.audioDevice) as AVCaptureInput
-            self.captureSession.addInput(audioInput)
-        } catch let error as NSError {
-            print(error)
-        }
-        
-        self.videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as AnyHashable : Int(kCVPixelFormatType_32BGRA)]
-        
-        //フレーム毎に呼び出すデリゲート登録
-        //let queue:DispatchQueue = DispatchQueue(label:"myqueue",attribite: DISPATCH_QUEUE_SERIAL)
+
+
+    func initialize() {
+
+        let videoInput = try! AVCaptureDeviceInput(device: self.videoDevice) as AVCaptureDeviceInput
+        let audioInput = try! AVCaptureDeviceInput(device: self.audioDevice) as AVCaptureInput
+        captureSession.addInput(videoInput)
+        captureSession.addInput(audioInput)
+
         let queue:DispatchQueue = DispatchQueue(label: "myqueue", attributes: .concurrent)
-        self.videoOutput.setSampleBufferDelegate(self, queue: queue)
-        self.videoOutput.alwaysDiscardsLateVideoFrames = true
-        
-        self.captureSession.addOutput(self.videoOutput)
-        
-        let videoLayer : AVCaptureVideoPreviewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
-        videoLayer.frame = self.view.bounds
+        videoOutput.setSampleBufferDelegate(self, queue: queue)
+        videoOutput.alwaysDiscardsLateVideoFrames = true
+        videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as AnyHashable : Int(kCVPixelFormatType_32BGRA)]
+        captureSession.addOutput(videoOutput)
+
+        let videoLayer : AVCaptureVideoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        videoLayer.frame = view.bounds
         videoLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
-        
-        self.view.layer.addSublayer(videoLayer)
-        
-        //カメラ向き
-        for connection in self.videoOutput.connections {
+        view.layer.addSublayer(videoLayer)
+
+        for connection in videoOutput.connections {
             if let conn = connection as? AVCaptureConnection {
                 if conn.isVideoOrientationSupported {
-                    conn.videoOrientation = AVCaptureVideoOrientation.portrait
+                    conn.videoOrientation = .portrait
                 }
             }
         }
+    }
 
+    func start() {
         self.captureSession.startRunning()
     }
-    
+
+
+    func stop() {
+        captureSession.stopRunning()
+    }
+
+
+    func restart() {
+        stop()
+        start()
+    }
+
+
     func imageFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> UIImage {
         //バッファーをUIImageに変換
         let imageBuffer: CVImageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
@@ -88,8 +92,7 @@ class FaceTracker: NSObject,AVCaptureVideoDataOutputSampleBufferDelegate {
         return resultImage
     }
     
-    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!)
-    {
+    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
         //同期処理（非同期処理ではキューが溜まりすぎて画面がついていかない）
         DispatchQueue.main.sync(execute: {
             
@@ -98,12 +101,14 @@ class FaceTracker: NSObject,AVCaptureVideoDataOutputSampleBufferDelegate {
             let ciimage:CIImage! = CIImage(image: image)
             
             //CIDetectorAccuracyHighだと高精度（使った感じは遠距離による判定の精度）だが処理が遅くなる
-            let detector : CIDetector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options:[CIDetectorAccuracy: CIDetectorAccuracyLow] )!
-            let faces : NSArray = detector.features(in: ciimage) as NSArray
+            let detector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options:[CIDetectorAccuracy: CIDetectorAccuracyLow] )!
+
+            print("exifOrientation\(exifOrientation(orientation: UIDevice.current.orientation))")
+            let options = [CIDetectorImageOrientation : exifOrientation(orientation: UIDevice.current.orientation)]
+            let faces = detector.features(in: ciimage, options: options) as NSArray
             
             var rects = Array<CGRect>();
-            if faces.count != 0
-            {
+            if faces.count != 0 {
                 var _ : CIFaceFeature = CIFaceFeature()
                 for feature in faces {
                     
@@ -127,5 +132,19 @@ class FaceTracker: NSObject,AVCaptureVideoDataOutputSampleBufferDelegate {
             
             self.findface(rects)
         })
+    }
+
+    func exifOrientation(orientation: UIDeviceOrientation) -> Int {
+        print("UIDeviceOrientation:\(orientation.rawValue)")
+        switch orientation {
+        case .portraitUpsideDown:
+            return 3
+        case .landscapeLeft:
+            return 8
+        case .landscapeRight:
+            return 6
+        default:
+            return 1
+        }
     }
 }

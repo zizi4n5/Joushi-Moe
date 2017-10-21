@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7827FADF1F9BEFBA00A7C0BA /* muon_10sec.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7827FADE1F9BEFBA00A7C0BA /* muon_10sec.wav */; };
+		7827FAE11F9BF48600A7C0BA /* Speech2Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7827FAE01F9BF48600A7C0BA /* Speech2Text.swift */; };
 		787EFB161F9B58D600E56D77 /* VoiceChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787EFB151F9B58D600E56D77 /* VoiceChanger.swift */; };
-		787EFB181F9B602300E56D77 /* muon_10sec.wav in Resources */ = {isa = PBXBuildFile; fileRef = 787EFB171F9B602300E56D77 /* muon_10sec.wav */; };
 		78A2C8AE1F9B200B00B2D105 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A2C8AD1F9B200B00B2D105 /* AppDelegate.swift */; };
 		78A2C8B01F9B200B00B2D105 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A2C8AF1F9B200B00B2D105 /* ViewController.swift */; };
 		78A2C8B31F9B200B00B2D105 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 78A2C8B11F9B200B00B2D105 /* Main.storyboard */; };
@@ -38,8 +39,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7827FADE1F9BEFBA00A7C0BA /* muon_10sec.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = muon_10sec.wav; path = "Joushi-Moe/muon_10sec.wav"; sourceTree = SOURCE_ROOT; };
+		7827FAE01F9BF48600A7C0BA /* Speech2Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Speech2Text.swift; sourceTree = "<group>"; };
 		787EFB151F9B58D600E56D77 /* VoiceChanger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceChanger.swift; sourceTree = "<group>"; };
-		787EFB171F9B602300E56D77 /* muon_10sec.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = muon_10sec.wav; path = ../../../../Desktop/muon_10sec.wav; sourceTree = "<group>"; };
 		78A2C8AA1F9B200B00B2D105 /* Joushi-Moe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Joushi-Moe.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		78A2C8AD1F9B200B00B2D105 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		78A2C8AF1F9B200B00B2D105 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -109,12 +111,13 @@
 				78A2C8AF1F9B200B00B2D105 /* ViewController.swift */,
 				78DAFE1E1F9B33E300C46741 /* FaceTracker.swift */,
 				787EFB151F9B58D600E56D77 /* VoiceChanger.swift */,
+				7827FAE01F9BF48600A7C0BA /* Speech2Text.swift */,
 				78DAFE201F9B40DD00C46741 /* Extensions.swift */,
 				78A2C8B11F9B200B00B2D105 /* Main.storyboard */,
 				78A2C8B41F9B200B00B2D105 /* Assets.xcassets */,
 				78A2C8B61F9B200B00B2D105 /* LaunchScreen.storyboard */,
 				78A2C8B91F9B200B00B2D105 /* Info.plist */,
-				787EFB171F9B602300E56D77 /* muon_10sec.wav */,
+				7827FADE1F9BEFBA00A7C0BA /* muon_10sec.wav */,
 			);
 			path = "Joushi-Moe";
 			sourceTree = "<group>";
@@ -246,7 +249,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				787EFB181F9B602300E56D77 /* muon_10sec.wav in Resources */,
+				7827FADF1F9BEFBA00A7C0BA /* muon_10sec.wav in Resources */,
 				78A2C8B81F9B200B00B2D105 /* LaunchScreen.storyboard in Resources */,
 				78A2C8B51F9B200B00B2D105 /* Assets.xcassets in Resources */,
 				78A2C8B31F9B200B00B2D105 /* Main.storyboard in Resources */,
@@ -275,6 +278,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				78A2C8B01F9B200B00B2D105 /* ViewController.swift in Sources */,
+				7827FAE11F9BF48600A7C0BA /* Speech2Text.swift in Sources */,
 				78A2C8AE1F9B200B00B2D105 /* AppDelegate.swift in Sources */,
 				787EFB161F9B58D600E56D77 /* VoiceChanger.swift in Sources */,
 				78DAFE1F1F9B33E300C46741 /* FaceTracker.swift in Sources */,
@@ -436,6 +440,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "zizi.Joushi-Moe";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -449,6 +454,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "zizi.Joushi-Moe";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
