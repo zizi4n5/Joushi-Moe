@@ -11,16 +11,19 @@ import AVFoundation
 
 class ViewController: UIViewController {
 
-    @IBOutlet var cameraView :UIView!
+    @IBOutlet var cameraView: UIView!
+    @IBOutlet var mode: UISegmentedControl!
     
     var faceTracker: FaceTracker? = nil
     var voiceChanger: VoiceChanger? = nil
-    let replicateCount: Int = 2
+    var replicateCount: Int = 2
+    var failedCount: Int = 0
+    var maxFailedCount: Int = 3
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        faceTracker = FaceTracker(view: self.cameraView, replicateCount: 2, findface:findface)
+        faceTracker = FaceTracker(view: self.cameraView, replicateCount: replicateCount, findface:findface)
         voiceChanger = VoiceChanger()
     }
 
@@ -48,18 +51,26 @@ class ViewController: UIViewController {
     
     func findface(_ arr:Array<CGRect>) -> Void {
         guard arr.count > 0 else {
-            self.imageView1.alpha = 0
-            self.imageView2.alpha = 0
+            failedCount = failedCount + 1
+            if maxFailedCount < failedCount {
+                self.imageView1.alpha = 0
+                self.imageView2.alpha = 0
+            }
             return
         }
         
         let rect = arr[0] //一番の顔だけ使う
         let imageRect = rect * 2.0
         guard imageRect.origin.y + imageRect.height < self.view.frame.height / CGFloat(replicateCount), 0 < imageRect.origin.y else {
-            self.imageView1.alpha = 0
-            self.imageView2.alpha = 0
+            failedCount = failedCount + 1
+            if maxFailedCount < failedCount {
+                self.imageView1.alpha = 0
+                self.imageView2.alpha = 0
+            }
             return
         }
+        
+        failedCount = 0
         
         switch UIDevice.current.orientation {
         case .portraitUpsideDown:
@@ -78,12 +89,25 @@ class ViewController: UIViewController {
         
         self.imageView1.frame = imageRect
         self.imageView2.frame = imageRect
-        self.imageView2.frame.origin.y = self.imageView2.frame.origin.y + self.view.frame.height / 2
+        self.imageView2.frame.origin.y = self.imageView2.frame.origin.y + self.view.frame.height / CGFloat(replicateCount)
         
         self.imageView1.alpha = 1
         
         if replicateCount == 2 {
             self.imageView2.alpha = 1
         }
+    }
+    
+    @IBAction func changeMode(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            replicateCount = 1
+        case 1:
+            replicateCount = 2
+        default:
+            replicateCount = 1
+        }
+        
+        faceTracker?.changeMode(mode: FaceTracker.Mode(rawValue: replicateCount)!)
     }
 }

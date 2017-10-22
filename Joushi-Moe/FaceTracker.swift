@@ -15,17 +15,25 @@ class FaceTracker: NSObject,AVCaptureVideoDataOutputSampleBufferDelegate {
     let videoDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
     let audioDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeAudio)
     let videoOutput = AVCaptureVideoDataOutput()
+    let videoLayer : AVCaptureVideoPreviewLayer
+    let replicatorLayer: CAReplicatorLayer = CAReplicatorLayer()
 
     let view: UIView
-    let replicateCount: Int
+    var replicateCount: Int
     let findface: (_ arr:Array<CGRect>) -> Void
     var currentVideoOrientation: AVCaptureVideoOrientation?
 
+    enum Mode: Int {
+        case Camera = 1
+        case VR = 2
+    }
 
     required init(view: UIView, replicateCount: Int, findface: @escaping (_ arr:Array<CGRect>) -> Void) {
         self.view=view
         self.replicateCount = replicateCount
         self.findface = findface
+        self.videoLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+
         super.init()
 
         initialize()
@@ -45,12 +53,9 @@ class FaceTracker: NSObject,AVCaptureVideoDataOutputSampleBufferDelegate {
         videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as AnyHashable : Int(kCVPixelFormatType_32BGRA)]
         captureSession.addOutput(videoOutput)
 
-        let videoLayer : AVCaptureVideoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
         videoLayer.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height / CGFloat(replicateCount))
         videoLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         
-
-        let replicatorLayer: CAReplicatorLayer = CAReplicatorLayer()
         replicatorLayer.addSublayer(videoLayer)
         replicatorLayer.instanceTransform = CATransform3DMakeTranslation(0, view.bounds.height / CGFloat(replicateCount), 0)
         replicatorLayer.instanceCount = replicateCount
@@ -80,6 +85,18 @@ class FaceTracker: NSObject,AVCaptureVideoDataOutputSampleBufferDelegate {
     func restart() {
         stop()
         start()
+    }
+    
+    func changeMode(mode: Mode) {
+        switch mode {
+        case .Camera:
+            replicateCount = 1
+        case .VR:
+            replicateCount = 2
+        }
+        
+        videoLayer.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height / CGFloat(replicateCount))
+        replicatorLayer.instanceTransform = CATransform3DMakeTranslation(0, view.bounds.height / CGFloat(replicateCount), 0)
     }
 
 
@@ -121,21 +138,6 @@ class FaceTracker: NSObject,AVCaptureVideoDataOutputSampleBufferDelegate {
                 var _ : CIFaceFeature = CIFaceFeature()
                 for feature in faces {
                     
-//                    // 座標変換
-//                    var faceRect : CGRect = (feature as AnyObject).bounds
-//                    let widthPer = (self.view.bounds.width/image.size.width)
-//                    let heightPer = (self.view.bounds.height/image.size.height)
-//                    
-//                    // UIKitは左上に原点があるが、CoreImageは左下に原点があるので揃える
-//                    faceRect.origin.y = image.size.height - faceRect.origin.y - faceRect.size.height
-//                    
-//                    //倍率変換
-//                    faceRect.origin.x = faceRect.origin.x * widthPer
-//                    faceRect.origin.y = faceRect.origin.y * heightPer
-//                    faceRect.size.width = faceRect.size.width * widthPer
-//                    faceRect.size.height = faceRect.size.height * heightPer
-                    
-                    
                     // 座標変換
                     var faceRect : CGRect = (feature as AnyObject).bounds
                     let per = (self.view.bounds.width/image.size.width)
@@ -145,7 +147,11 @@ class FaceTracker: NSObject,AVCaptureVideoDataOutputSampleBufferDelegate {
                     
                     //倍率変換
                     faceRect.origin.x = faceRect.origin.x * per
-                    faceRect.origin.y = faceRect.origin.y * per - self.view.bounds.height / 4
+                    if replicateCount == 1 {
+                        faceRect.origin.y = faceRect.origin.y * per
+                    } else {
+                        faceRect.origin.y = faceRect.origin.y * per - self.view.bounds.height / 4
+                    }
                     faceRect.size.width = faceRect.size.width * per
                     faceRect.size.height = faceRect.size.height * per
                     
