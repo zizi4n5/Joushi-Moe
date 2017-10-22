@@ -26,6 +26,18 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
+                            <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2uY-Ut-Eev">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </view>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7hj-r3-LlF">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="333"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                            </view>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="37v-WL-Bnh">
+                                <rect key="frame" x="0.0" y="334" width="375" height="333"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
+                            </view>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="1" translatesAutoresizingMaskIntoConstraints="NO" id="OsY-bv-EkO">
                                 <rect key="frame" x="127" y="620" width="121" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -42,6 +54,9 @@
                     </view>
                     <connections>
                         <outlet property="cameraView" destination="nds-sW-ihP" id="SBn-ZE-bSW"/>
+                        <outlet property="faceTrackerCameraView" destination="2uY-Ut-Eev" id="pBW-Pd-dUo"/>
+                        <outlet property="faceTrackerVRLeftView" destination="7hj-r3-LlF" id="Keq-uG-ffc"/>
+                        <outlet property="faceTrackerVRRightView" destination="37v-WL-Bnh" id="gCT-wl-uQx"/>
                         <outlet property="mode" destination="OsY-bv-EkO" id="3Gh-Cv-6hC"/>
                         <outlet property="view" destination="8bC-Xf-vdC" id="TIx-RY-j6P"/>
                     </connections>
