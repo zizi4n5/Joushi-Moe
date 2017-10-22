@@ -16,13 +16,15 @@ class FaceTracker: NSObject,AVCaptureVideoDataOutputSampleBufferDelegate {
     let audioDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeAudio)
     let videoOutput = AVCaptureVideoDataOutput()
 
-    let view:UIView
-    let findface : (_ arr:Array<CGRect>) -> Void
+    let view: UIView
+    let replicateCount: Int
+    let findface: (_ arr:Array<CGRect>) -> Void
     var currentVideoOrientation: AVCaptureVideoOrientation?
 
 
-    required init(view:UIView, findface: @escaping (_ arr:Array<CGRect>) -> Void) {
+    required init(view: UIView, replicateCount: Int, findface: @escaping (_ arr:Array<CGRect>) -> Void) {
         self.view=view
+        self.replicateCount = replicateCount
         self.findface = findface
         super.init()
 
@@ -44,10 +46,18 @@ class FaceTracker: NSObject,AVCaptureVideoDataOutputSampleBufferDelegate {
         captureSession.addOutput(videoOutput)
 
         let videoLayer : AVCaptureVideoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        videoLayer.frame = view.bounds
+        videoLayer.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height / CGFloat(replicateCount))
         videoLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
-        view.layer.addSublayer(videoLayer)
+        
 
+        let replicatorLayer: CAReplicatorLayer = CAReplicatorLayer()
+        replicatorLayer.addSublayer(videoLayer)
+        replicatorLayer.instanceTransform = CATransform3DMakeTranslation(0, view.bounds.height / CGFloat(replicateCount), 0)
+        replicatorLayer.instanceCount = replicateCount
+        replicatorLayer.instanceDelay = 0
+        view.layer.addSublayer(replicatorLayer)
+        
+        
         for connection in videoOutput.connections {
             if let conn = connection as? AVCaptureConnection {
                 if conn.isVideoOrientationSupported {
@@ -88,8 +98,8 @@ class FaceTracker: NSObject,AVCaptureVideoDataOutputSampleBufferDelegate {
         let imageRef = context!.makeImage()
         
         CVPixelBufferUnlockBaseAddress(imageBuffer, CVPixelBufferLockFlags(rawValue: 0))
-        let resultImage: UIImage = UIImage(cgImage: imageRef!)
-        return resultImage
+        let image: UIImage = UIImage(cgImage: imageRef!)
+        return image
     }
     
     func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
@@ -103,7 +113,6 @@ class FaceTracker: NSObject,AVCaptureVideoDataOutputSampleBufferDelegate {
             //CIDetectorAccuracyHighだと高精度（使った感じは遠距離による判定の精度）だが処理が遅くなる
             let detector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options:[CIDetectorAccuracy: CIDetectorAccuracyLow] )!
 
-            print("exifOrientation\(exifOrientation(orientation: UIDevice.current.orientation))")
             let options = [CIDetectorImageOrientation : exifOrientation(orientation: UIDevice.current.orientation)]
             let faces = detector.features(in: ciimage, options: options) as NSArray
             
@@ -112,19 +121,33 @@ class FaceTracker: NSObject,AVCaptureVideoDataOutputSampleBufferDelegate {
                 var _ : CIFaceFeature = CIFaceFeature()
                 for feature in faces {
                     
+//                    // 座標変換
+//                    var faceRect : CGRect = (feature as AnyObject).bounds
+//                    let widthPer = (self.view.bounds.width/image.size.width)
+//                    let heightPer = (self.view.bounds.height/image.size.height)
+//                    
+//                    // UIKitは左上に原点があるが、CoreImageは左下に原点があるので揃える
+//                    faceRect.origin.y = image.size.height - faceRect.origin.y - faceRect.size.height
+//                    
+//                    //倍率変換
+//                    faceRect.origin.x = faceRect.origin.x * widthPer
+//                    faceRect.origin.y = faceRect.origin.y * heightPer
+//                    faceRect.size.width = faceRect.size.width * widthPer
+//                    faceRect.size.height = faceRect.size.height * heightPer
+                    
+                    
                     // 座標変換
                     var faceRect : CGRect = (feature as AnyObject).bounds
-                    let widthPer = (self.view.bounds.width/image.size.width)
-                    let heightPer = (self.view.bounds.height/image.size.height)
+                    let per = (self.view.bounds.width/image.size.width)
                     
                     // UIKitは左上に原点があるが、CoreImageは左下に原点があるので揃える
                     faceRect.origin.y = image.size.height - faceRect.origin.y - faceRect.size.height
                     
                     //倍率変換
-                    faceRect.origin.x = faceRect.origin.x * widthPer
-                    faceRect.origin.y = faceRect.origin.y * heightPer
-                    faceRect.size.width = faceRect.size.width * widthPer
-                    faceRect.size.height = faceRect.size.height * heightPer
+                    faceRect.origin.x = faceRect.origin.x * per
+                    faceRect.origin.y = faceRect.origin.y * per - self.view.bounds.height / 4
+                    faceRect.size.width = faceRect.size.width * per
+                    faceRect.size.height = faceRect.size.height * per
                     
                     rects.append(faceRect)
                 }
@@ -135,7 +158,6 @@ class FaceTracker: NSObject,AVCaptureVideoDataOutputSampleBufferDelegate {
     }
 
     func exifOrientation(orientation: UIDeviceOrientation) -> Int {
-        print("UIDeviceOrientation:\(orientation.rawValue)")
         switch orientation {
         case .portraitUpsideDown:
             return 3
