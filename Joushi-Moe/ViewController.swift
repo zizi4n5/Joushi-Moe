@@ -27,7 +27,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         faceTracker = FaceTracker(view: self.cameraView, replicateCount: replicateCount, findface:findface)
-        voiceChanger = VoiceChanger()
+//        voiceChanger = VoiceChanger()
     }
 
 
@@ -51,7 +51,7 @@ class ViewController: UIViewController {
         self.faceTrackerVRRightView.addSubview(self.imageVRRightView)
 
         faceTracker?.start()
-        voiceChanger?.start()
+//        voiceChanger?.start()
     }
 
     
