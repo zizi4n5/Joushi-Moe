@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7827FADF1F9BEFBA00A7C0BA /* muon_10sec.wav in Resources */ = {isa = PBXBuildFile; fileRef = 7827FADE1F9BEFBA00A7C0BA /* muon_10sec.wav */; };
 		7827FAE11F9BF48600A7C0BA /* Speech2Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7827FAE01F9BF48600A7C0BA /* Speech2Text.swift */; };
 		787EFB161F9B58D600E56D77 /* VoiceChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787EFB151F9B58D600E56D77 /* VoiceChanger.swift */; };
 		78A2C8AE1F9B200B00B2D105 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A2C8AD1F9B200B00B2D105 /* AppDelegate.swift */; };
@@ -39,7 +38,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7827FADE1F9BEFBA00A7C0BA /* muon_10sec.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = muon_10sec.wav; path = "Joushi-Moe/muon_10sec.wav"; sourceTree = SOURCE_ROOT; };
 		7827FAE01F9BF48600A7C0BA /* Speech2Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Speech2Text.swift; sourceTree = "<group>"; };
 		787EFB151F9B58D600E56D77 /* VoiceChanger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceChanger.swift; sourceTree = "<group>"; };
 		78A2C8AA1F9B200B00B2D105 /* Joushi-Moe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Joushi-Moe.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -117,7 +115,6 @@
 				78A2C8B41F9B200B00B2D105 /* Assets.xcassets */,
 				78A2C8B61F9B200B00B2D105 /* LaunchScreen.storyboard */,
 				78A2C8B91F9B200B00B2D105 /* Info.plist */,
-				7827FADE1F9BEFBA00A7C0BA /* muon_10sec.wav */,
 			);
 			path = "Joushi-Moe";
 			sourceTree = "<group>";
@@ -249,7 +246,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7827FADF1F9BEFBA00A7C0BA /* muon_10sec.wav in Resources */,
 				78A2C8B81F9B200B00B2D105 /* LaunchScreen.storyboard in Resources */,
 				78A2C8B51F9B200B00B2D105 /* Assets.xcassets in Resources */,
 				78A2C8B31F9B200B00B2D105 /* Main.storyboard in Resources */,
