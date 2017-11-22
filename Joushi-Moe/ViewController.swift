@@ -18,7 +18,6 @@ class ViewController: UIViewController {
     @IBOutlet var mode: UISegmentedControl!
     
     var faceTracker: FaceTracker? = nil
-    var voiceChanger: VoiceChanger? = nil
     var replicateCount: Int = 2
     var failedCount: Int = 0
     var maxFailedCount: Int = 10
@@ -27,7 +26,6 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         faceTracker = FaceTracker(view: self.cameraView, replicateCount: replicateCount, findface:findface)
-//        voiceChanger = VoiceChanger()
     }
 
 
@@ -51,7 +49,6 @@ class ViewController: UIViewController {
         self.faceTrackerVRRightView.addSubview(self.imageVRRightView)
 
         faceTracker?.start()
-//        voiceChanger?.start()
     }
 
     
