@@ -128,7 +128,7 @@ class FaceTracker: NSObject,AVCaptureVideoDataOutputSampleBufferDelegate {
             let ciimage:CIImage! = CIImage(image: image)
             
             //CIDetectorAccuracyHighだと高精度（使った感じは遠距離による判定の精度）だが処理が遅くなる
-            let detector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options:[CIDetectorAccuracy: CIDetectorAccuracyLow] )!
+            let detector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options:[CIDetectorAccuracy: CIDetectorTracking] )!
 
             let options = [CIDetectorImageOrientation : exifOrientation(orientation: UIDevice.current.orientation)]
             let faces = detector.features(in: ciimage, options: options) as NSArray
