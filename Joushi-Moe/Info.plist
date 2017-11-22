@@ -28,6 +28,8 @@
 	<string>カメラでの撮影に必要です。</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>アルバムの選択に必要です。</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>This app needs to use Speech Recognition</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

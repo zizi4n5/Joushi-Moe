@@ -16,8 +16,15 @@ class ViewController: UIViewController {
     @IBOutlet var faceTrackerVRLeftView: UIView!
     @IBOutlet var faceTrackerVRRightView: UIView!
     @IBOutlet var mode: UISegmentedControl!
-    
+    @IBOutlet weak var inputTextCameraView: UITextView!
+    @IBOutlet weak var inputTextVRLeftView: UITextView!
+    @IBOutlet weak var inputTextVRRightView: UITextView!
+    @IBOutlet weak var viewVRLeft: UIView!
+    @IBOutlet weak var viewVRRight: UIView!
+
     var faceTracker: FaceTracker? = nil
+    let voiceManager = VoiceManager(locale: Locale(identifier: "ja-JP"))
+    
     var replicateCount: Int = 2
     var failedCount: Int = 0
     var maxFailedCount: Int = 10
@@ -26,6 +33,15 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         faceTracker = FaceTracker(view: self.cameraView, replicateCount: replicateCount, findface:findface)
+        voiceManager.pitchNode.pitch = 1800
+        voiceManager.recognitionResult = { result in
+            self.inputTextCameraView.text = result.bestTranscription.formattedString
+            self.inputTextVRLeftView.text = result.bestTranscription.formattedString
+            self.inputTextVRRightView.text = result.bestTranscription.formattedString
+        }
+        
+        viewVRLeft.transform = CGAffineTransform(rotationAngle: (CGFloat.pi / 2) * 3)
+        viewVRRight.transform = CGAffineTransform(rotationAngle: (CGFloat.pi / 2) * 3)
     }
 
 
@@ -49,6 +65,7 @@ class ViewController: UIViewController {
         self.faceTrackerVRRightView.addSubview(self.imageVRRightView)
 
         faceTracker?.start()
+        voiceManager.start()
     }
 
     
