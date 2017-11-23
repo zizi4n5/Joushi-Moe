@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0519986B1FC64A37007D9D2F /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 051998671FC64A12007D9D2F /* Alamofire.framework */; };
+		0519986C1FC64A37007D9D2F /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 051998671FC64A12007D9D2F /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0519986F1FC64A6B007D9D2F /* LineBotManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0519986E1FC64A6B007D9D2F /* LineBotManager.swift */; };
 		0549037D1FC62F850051C1F4 /* WaonJoyo-R.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0549037C1FC62ED50051C1F4 /* WaonJoyo-R.otf */; };
 		05AC42521FC5A823007C7CF8 /* VoiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05AC42511FC5A823007C7CF8 /* VoiceManager.swift */; };
 		78A2C8AE1F9B200B00B2D105 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A2C8AD1F9B200B00B2D105 /* AppDelegate.swift */; };
@@ -37,7 +40,23 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		0519986D1FC64A37007D9D2F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0519986C1FC64A37007D9D2F /* Alamofire.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		051998671FC64A12007D9D2F /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
+		0519986E1FC64A6B007D9D2F /* LineBotManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineBotManager.swift; sourceTree = "<group>"; };
 		0549037C1FC62ED50051C1F4 /* WaonJoyo-R.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "WaonJoyo-R.otf"; sourceTree = "<group>"; };
 		05AC42511FC5A823007C7CF8 /* VoiceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VoiceManager.swift; sourceTree = "<group>"; };
 		78A2C8AA1F9B200B00B2D105 /* Joushi-Moe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Joushi-Moe.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -62,6 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0519986B1FC64A37007D9D2F /* Alamofire.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,12 +102,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		05BF7BC91FC649B3005FD045 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				051998671FC64A12007D9D2F /* Alamofire.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		78A2C8A11F9B200B00B2D105 = {
 			isa = PBXGroup;
 			children = (
 				78A2C8AC1F9B200B00B2D105 /* Joushi-Moe */,
 				78A2C8C11F9B200B00B2D105 /* Joushi-MoeTests */,
 				78A2C8CC1F9B200B00B2D105 /* Joushi-MoeUITests */,
+				05BF7BC91FC649B3005FD045 /* Frameworks */,
 				78A2C8AB1F9B200B00B2D105 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -110,6 +139,7 @@
 				78A2C8AF1F9B200B00B2D105 /* ViewController.swift */,
 				78DAFE1E1F9B33E300C46741 /* FaceTracker.swift */,
 				05AC42511FC5A823007C7CF8 /* VoiceManager.swift */,
+				0519986E1FC64A6B007D9D2F /* LineBotManager.swift */,
 				78DAFE201F9B40DD00C46741 /* Extensions.swift */,
 				78A2C8B11F9B200B00B2D105 /* Main.storyboard */,
 				78A2C8B41F9B200B00B2D105 /* Assets.xcassets */,
@@ -147,6 +177,7 @@
 				78A2C8A61F9B200B00B2D105 /* Sources */,
 				78A2C8A71F9B200B00B2D105 /* Frameworks */,
 				78A2C8A81F9B200B00B2D105 /* Resources */,
+				0519986D1FC64A37007D9D2F /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -277,6 +308,7 @@
 				78A2C8B01F9B200B00B2D105 /* ViewController.swift in Sources */,
 				78A2C8AE1F9B200B00B2D105 /* AppDelegate.swift in Sources */,
 				78DAFE1F1F9B33E300C46741 /* FaceTracker.swift in Sources */,
+				0519986F1FC64A6B007D9D2F /* LineBotManager.swift in Sources */,
 				78DAFE211F9B40DD00C46741 /* Extensions.swift in Sources */,
 				05AC42521FC5A823007C7CF8 /* VoiceManager.swift in Sources */,
 			);
@@ -431,6 +463,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = G828R8B6AG;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Joushi-Moe/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "zizi.Joushi-Moe";
@@ -445,6 +481,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = G828R8B6AG;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Joushi-Moe/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "zizi.Joushi-Moe";

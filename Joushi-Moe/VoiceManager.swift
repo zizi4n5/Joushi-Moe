@@ -18,7 +18,8 @@ class VoiceManager: NSObject {
     var recognitionTask: SFSpeechRecognitionTask?
     var talker = AVSpeechSynthesizer()
     var recognitionTime: Date?
-    
+    var formattedString = ""
+
     var recognitionResult: ((SFSpeechRecognitionResult) -> Void)?
     
     func start() {
@@ -73,6 +74,11 @@ class VoiceManager: NSObject {
     fileprivate func initRecognitionRequest() {
         recognitionTask?.finish() // ちゃんとfinishを実行しておかないと1分の制限に引っかかってしまうので注意！！
         recognitionRequest?.endAudio()
+     
+        if formattedString.count > 0 {
+            LineBotManager.push(message: formattedString) // センテンス毎にLINEに送信
+        }
+        
         recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
         recognitionRequest.shouldReportPartialResults = true
         recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest, resultHandler: recognitionResultHandler)
@@ -82,6 +88,7 @@ class VoiceManager: NSObject {
     
     fileprivate func recognitionResultHandler(result: SFSpeechRecognitionResult?, error: Error?) {
         if let result = result {
+            self.formattedString = result.bestTranscription.formattedString
             self.recognitionResult?(result)
             self.recognitionTime = Date()
         } else {
